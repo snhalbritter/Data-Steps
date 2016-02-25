@@ -1,0 +1,117 @@
+---
+title: "Subsetting"
+author: "Rory Tikalsky"
+date: "February 25, 2016"
+output: html_document
+---
+
+#Subsetting Data
+
+#### Subsetting is used to break apart complex data sets or to select out the smaller portion of a data set that you're interested in exploring.
+
+
+######making some sample data for us to work on...
+```
+data1 <- 1:10
+data2 <- c("a","b","c","d","e","f","g","h","i","j")
+data3 <- c(3,4,6,8,3,7,3,3,9,9)
+example <- data.frame(data1, data2, data3)
+```
+
+### Subsetting has four parts to it:
+```
+test <- dat[row,column]
+```
+
+####In the example above... 
+* #####test is the "catch" where your subset data will be written
+* #####dat is the data set that you're going to be subsetting from, for example Salaries or FieldingPost from the Lahman package.
+* #####row is the row of your data you want to subset. 
+######_Using our exapmle above, putting in 1:5 will return rows 1-5 of your data._
+```
+test <- example[1:5, ]
+test
+#  data1 data2 data3
+##1     1     a     3
+##2     2     b     4
+##3     3     c     6
+##4     4     d     8
+##5     5     e     3
+```
+###### Or instead, you can do Salaries$yearID=="2002" if you want all rows in Salaries where the year is 2002.
+
+* #####column is the column of the data you want to subset.
+######_For example: c(1,3) will return columns 1 and 3._
+```
+test <- example[ , c(1,3)]
+test
+   data1 data3
+##1      1     3
+##2      2     4
+##3      3     6
+##4      4     8
+##5      5     3
+##6      6     7
+##7      7     3
+##8      8     3
+##9      9     9
+##10    10     9
+```
+###### _Or instead, you can do "data3" if you want it to return a vector of the column named data3._
+```
+test <- example[ , "data3"]
+test
+## [1] 3 4 6 8 3 7 3 3 9 9
+```
+
+####General Notes
+##### When subsetting, leave a blank for either column or row if you want it to include all data.
+######_In this example, because we didn't specify a row, it returned all of them._
+```
+test <- example[ 4:6 , ]
+test
+#  data1 data2 data3
+##4     4     d     8
+##5     5     e     3
+##6     6     f     7
+```
+###### _In this example, we specify both and it returns just what we requested._
+```
+test <- example[ 4:6 , "data3"]
+test
+
+## [1] 8 3 7
+```
+
+------
+
+#### Let's apply these examples to the data we worked with last semester.
+
+```{r}
+library(Lahman)
+data(Master)
+```
+
+######Let's expierment by narrowing the complex dataset into just those players born in Texas.
+```{r}
+dat.texas <- Master[ Master$birthState=="TX", ]
+head(dat.texas, 3)
+```
+######This will create a data frame with all observations in Master where birthState is Texas! Now we can look at more interesting things inside that data set.
+
+
+#######Let's get more specific by examining only those who were born in 1975
+```{r}
+dat.texas.1975 <- dat.texas[ dat.texas$birthYear=="1975", ]
+```
+#######Getting rid of NAs can be really helpful when subsetting, use the is.na(dat$x) command, where "x" is the column where if there is NA you want to delete it.
+```{r}
+dat.texas.1975.clean <- dat.texas.1975[ ! is.na(dat.texas.1975$playerID) , ]
+head(dat.texas.1975.clean, 3)
+```
+####### We don't care about a lot of these variables, so let's pick out what we're interested in by specifying both rows and columns. (note that we already narrowed our rows earlier on, which is why its blank below)
+```{r}
+dat.texas.1975.names <- dat.texas.1975.clean[ , c("nameFirst","nameLast")]
+head(dat.texas.1975.names)
+```
+
