@@ -1,0 +1,51 @@
+---
+title: "Data Load"
+author: "Susannah Bartlett"
+date: "February 25, 2016"
+output: html_document
+---
+
+####Dealing with missing value:
+#####Finding missing values
+```{r}
+#Example using a sample dataframe 
+y <- c(1,2,3,NA)
+is.na(y) # returns a vector (F F F T)
+
+#Example using dataframe
+is.na(dat.save.rain$cap_area) # returns TRUE of
+```
+
+#####Recoding values to missing
+```{r}
+#Example using a sample datatframe "y"
+#We're going to recode the 2 within the "y" dataframe to read NA instead
+y[y == 2] <- NA
+y
+
+#Example using a dataframe
+#The only difference here is that we have to select the rows where there is a recorde we want to recode. In this example i am replacing all of the blank/empty cells with NA
+dat.save.rain$loc_type[dat.save.rain$loc_type == ""] <- NA
+dat.save.rain
+```
+
+
+#####Exclude missing values from analyses
+```{r}
+#Example using sample dataframe
+x <- c(1,2,NA,3) #lets make another example sample
+mean(x) #oh no!
+mean(x, na.rm = TRUE) # returns the mean without NA included
+
+#complete.cases(): this function returns a logical vector indicating which cases are complete, i.e., have no missing values.
+?complete.cases()
+x[complete.cases(x)] #will only include the actual values
+x[!complete.cases(x)] #will return the missing values
+
+x2 <- x[complete.cases(x)]
+x2
+
+#na.omit(): removes cases that are na
+?na.omit()
+x3 <- na.omit(x)
+```
