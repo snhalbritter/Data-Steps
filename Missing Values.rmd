@@ -49,3 +49,27 @@ x2
 ?na.omit()
 x3 <- na.omit(x)
 ```
+#####Missing Data from Imported Files
+
+```{r}
+#Often times surveys or datasets will not have N/A or a blank for missing values.
+#Missing information may be recorded as a very large or negative number. 
+#If this is known about a data set, these values can be recast as NA so that NA functions, such as na.rm=T, can be performed on the data. 
+z1 <- c(1:10, -99, 9999)
+is.na(z1) <- which(z1 == c(-99, 9999))
+z1
+```
+
+#####Warning! When sorting, R will automatically drop NAs
+```{r}
+z2 <- c(1, 4, 3, NA)
+z2s <- sort(z2)
+z2s
+length(z2s)
+
+#the command na.last can be used to keep NAs ina dataset and placed at the end of the sort.
+z2 <- c(1, 4, 3, NA)
+z2s <- sort(z2, na.last=T)
+z2s
+```
+
